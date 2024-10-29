@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Header from './components/Header';
-import ProtectedRoute from './components/ProtectedRoute';
+import Footer from './components/Footer';  // Import Footer
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -16,31 +16,16 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Header />
-        <div style={{ paddingTop: '60px' }}> {/* Offset for fixed header */}
+        <div style={{ paddingTop: '60px', paddingBottom: '60px' }}> {/* Offset for fixed header and footer */}
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-
-            {/* Protected Routes */}
-            <Route
-              path="/properties"
-              element={
-                <ProtectedRoute>
-                  <PropertiesPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/favorites"
-              element={
-                <ProtectedRoute>
-                  <FavoritesPage />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/properties" element={<PropertiesPage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
           </Routes>
         </div>
+        <Footer /> {/* Footer always at the bottom */}
       </Router>
     </AuthProvider>
   );

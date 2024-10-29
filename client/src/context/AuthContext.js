@@ -1,4 +1,4 @@
-// context/AuthContext.js
+// src/context/AuthContext.js
 
 import React, { createContext, useContext, useState } from 'react';
 
@@ -9,8 +9,8 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  // State for managing user and auth status
   const [user, setUser] = useState(null);
+  const [favorites, setFavorites] = useState([]); // Store favorites
 
   // Login function
   const login = (username) => {
@@ -20,10 +20,21 @@ export const AuthProvider = ({ children }) => {
   // Logout function
   const logout = () => {
     setUser(null);
+    setFavorites([]); // Clear favorites on logout
+  };
+
+  // Add a property to favorites
+  const addFavorite = (property) => {
+    setFavorites((prev) => [...prev, property]);
+  };
+
+  // Remove a property from favorites
+  const removeFavorite = (propertyId) => {
+    setFavorites((prev) => prev.filter((property) => property.id !== propertyId));
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, favorites, addFavorite, removeFavorite }}>
       {children}
     </AuthContext.Provider>
   );
