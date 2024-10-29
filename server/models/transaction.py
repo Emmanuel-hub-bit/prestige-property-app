@@ -1,0 +1,16 @@
+from sqlalchemy_serializer import SerializerMixin
+from datetime import datetime
+from utils.dbconfig import db
+
+class Transaction(db.Model, SerializerMixin):
+    __tablename__ = 'transactions'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    house_id = db.Column(db.Integer, db.ForeignKey('houses.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    transaction_date = db.Column(db.DateTime, default=datetime.utcnow)
+    payment_method = db.Column(db.String(50), nullable=False)
+
+    # Relationships
+    user = db.relationship('User', back_populates='transactions')
+    house = db.relationship("House", back_populates="transactions", overlaps="houses")
