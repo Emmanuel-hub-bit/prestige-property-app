@@ -1,7 +1,6 @@
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
 from utils.dbconfig import db
-from models.user import User
 
 class PropertyTransaction(db.Model, SerializerMixin):
     __tablename__ = 'property_transactions'
@@ -13,5 +12,6 @@ class PropertyTransaction(db.Model, SerializerMixin):
     payment_method = db.Column(db.String(50), nullable=False)
 
     # Relationships
-    user = db.relationship('User', back_populates='transactions')
     property = db.relationship('Property', back_populates='transactions')
+    user = db.relationship('User', back_populates='transactions')  # Added relationship
+

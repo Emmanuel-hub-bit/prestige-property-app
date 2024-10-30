@@ -20,7 +20,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Configuring the application
 app = Flask(__name__)
-CORS(app=app)
+CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
 
 # Database configuration and initialization
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -31,7 +31,8 @@ with app.app_context():
     db.create_all()  # Ensure all tables are created
 
 # Secret key for JWT generations
-secret_key = base64.b64encode(os.urandom(24)).decode('utf-8')
+# Changed this to set the SECRET_KEY in the app config
+app.config['SECRET_KEY'] = base64.b64encode(os.urandom(24)).decode('utf-8')
 
 # Welcome route
 @app.route('/')
@@ -42,10 +43,13 @@ def home():
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
-    
+    print("Received data:", data)
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'message': 'Email already exists.'}), 400
     
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     new_user = User(username=username, email=email, password=hashed_password)
@@ -64,17 +68,20 @@ def login():
     user = User.query.filter_by(email=email).first()
     
     if user and check_password_hash(user.password, password):
-        expiration_time = datetime.utcnow() + timedelta(hours=1)
-        token = jwt.encode({'user_id': user.id, 'exp': expiration_time}, secret_key, algorithm='HS256')
-        print(token)
-        return jsonify({'message': 'Login successful', 'token': token})
-    else:
-        return jsonify({'message': 'Invalid user credentials.'})
+        # Using app.config['SECRET_KEY'] for JWT encoding
+        token = jwt.encode({
+            'user_id': user.id, 
+            'exp': datetime.utcnow() + timedelta(hours=1)
+        }, app.config['SECRET_KEY'], algorithm='HS256')  # Changed here
+        return jsonify({'message': 'Login successful', 'token': token}), 200
+    
+    return jsonify({'message': 'Invalid email or password.'}), 401
+
 
 # Helper function to decode JWT 
 def decode_token(token):
     try:
-        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])  # Changed to use app.config['SECRET_KEY']
         return payload
     except jwt.ExpiredSignatureError:
         return 'Token has expired. Please log in again.'
@@ -202,9 +209,6 @@ def get_all_favorites():
         })
     return jsonify(favorite_list), 200
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-

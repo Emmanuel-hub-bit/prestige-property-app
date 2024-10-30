@@ -53,7 +53,12 @@ const PropertiesPage = () => {
         <div style={propertyListStyle}>
           {properties.map((property) => (
             <div key={property.id}>
-              <PropertyItem property={property} />
+              <PropertyItem 
+              key={property.id} 
+              property={property} 
+              isFavorite={favorites.some((fav) => fav.id === property.id)} 
+              toggleFavorite={() => toggleFavorite(property)} 
+            />
               <button onClick={() => toggleFavorite(property)} style={favoriteButtonStyle}>
                 {favorites.some((fav) => fav.id === property.id) ? 'Unfavorite' : 'Favorite'}
               </button>
@@ -67,7 +72,12 @@ const PropertiesPage = () => {
 
 // Inline styles
 const containerStyle = { textAlign: 'center', padding: '20px' };
-const propertyListStyle = { display: 'grid', gap: '10px', padding: '20px' };
+const propertyListStyle = { 
+    display: 'grid', 
+    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', // Creates a responsive grid
+    gap: '10px', 
+    padding: '20px' 
+};
 const loadingStyle = { color: 'blue' };
 const errorStyle = { color: 'red' };
 const favoriteButtonStyle = { marginTop: '10px', padding: '5px', cursor: 'pointer' };
