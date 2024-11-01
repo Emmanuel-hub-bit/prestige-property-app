@@ -10,30 +10,70 @@ const PropertyItem = ({ property }) => {
         alt={property.name} 
         style={imageStyle} 
       />
-      <h3>{property.name}</h3>
-      <p>Location: {property.location}</p>
-      <p>Price: {property.price}</p>
+      <h3 style={titleStyle} >{property.name}</h3>
+      <p style={locationStyle} >Location: {property.location}</p>
+      <p style={priceStyle} >Price: {property.price}</p>
     </div>
   );
 };
 
 // Inline style for property item
+// const propertyItemStyle = {
+//   border: '1px solid #ddd',
+//   padding: '15px',
+//   borderRadius: '8px',
+//   textAlign: 'left',
+//   display: 'flex', // Use flexbox for consistent layout
+//   flexDirection: 'column', // Align children vertically
+//   height: '300px', // Set a fixed height for all items
+//   justifyContent: 'space-between', // Space out children evenly
+// };
+
+// // Inline style for property image
+// const imageStyle = {
+//   width: '100%',  // Make the image responsive
+//   borderRadius: '8px', // Match the card's border radius
+//   marginBottom: '10px' // Space between image and text
+// };
+
+
+// Inline styles
 const propertyItemStyle = {
   border: '1px solid #ddd',
   padding: '15px',
   borderRadius: '8px',
   textAlign: 'left',
-  display: 'flex', // Use flexbox for consistent layout
-  flexDirection: 'column', // Align children vertically
-  height: '300px', // Set a fixed height for all items
-  justifyContent: 'space-between', // Space out children evenly
+  display: 'flex',
+  flexDirection: 'column',
+  height: '320px', // Adjusted height for consistent layout
+  justifyContent: 'space-between',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Light shadow for card effect
 };
 
-// Inline style for property image
 const imageStyle = {
-  width: '100%',  // Make the image responsive
-  borderRadius: '8px', // Match the card's border radius
-  marginBottom: '10px' // Space between image and text
+  width: '100%',
+  height: '150px', // Set a fixed height for the image
+  objectFit: 'cover', // Ensure the image covers the area
+  borderRadius: '8px', 
+  marginBottom: '10px',
+};
+
+const titleStyle = {
+  fontSize: '1.2rem',
+  margin: '10px 0 5px',
+};
+
+const locationStyle = {
+  fontSize: '0.9rem',
+  color: '#555',
+  margin: '5px 0',
+};
+
+const priceStyle = {
+  fontSize: '1rem',
+  fontWeight: 'bold',
+  color: '#333',
+  margin: '5px 0',
 };
 
 export default PropertyItem;

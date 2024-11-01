@@ -8,13 +8,13 @@ import { apiEndpoint } from '../api';
 const PropertiesPage = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Error state
-  const { favorites, addFavorite, removeFavorite } = useAuth();
+  const [error, setError] = useState(null);
+  const { favorites, addFavorite } = useAuth();
 
   useEffect(() => {
     const fetchProperties = async () => {
       setLoading(true);
-      setError(null); // Clear previous errors
+      setError(null);
       try {
         const response = await fetch(apiEndpoint('properties'), { method: 'GET' });
         if (response.ok) {
@@ -33,13 +33,8 @@ const PropertiesPage = () => {
     fetchProperties();
   }, []);
 
-  const toggleFavorite = (property) => {
-    const isFavorite = favorites.some((fav) => fav.id === property.id);
-    if (isFavorite) {
-      removeFavorite(property.id);
-    } else {
-      addFavorite(property);
-    }
+  const handleFavorite = (property) => {
+    addFavorite(property);
   };
 
   return (
@@ -54,13 +49,11 @@ const PropertiesPage = () => {
           {properties.map((property) => (
             <div key={property.id}>
               <PropertyItem 
-              key={property.id} 
-              property={property} 
-              isFavorite={favorites.some((fav) => fav.id === property.id)} 
-              toggleFavorite={() => toggleFavorite(property)} 
-            />
-              <button onClick={() => toggleFavorite(property)} style={favoriteButtonStyle}>
-                {favorites.some((fav) => fav.id === property.id) ? 'Unfavorite' : 'Favorite'}
+                property={property} 
+                isFavorite={favorites.some((fav) => fav.id === property.id)} 
+              />
+              <button onClick={() => handleFavorite(property)} style={favoriteButtonStyle}>
+                Favorite
               </button>
             </div>
           ))}
@@ -74,7 +67,7 @@ const PropertiesPage = () => {
 const containerStyle = { textAlign: 'center', padding: '20px' };
 const propertyListStyle = { 
     display: 'grid', 
-    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', // Creates a responsive grid
+    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
     gap: '10px', 
     padding: '20px' 
 };
