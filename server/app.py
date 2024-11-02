@@ -210,5 +210,8 @@ def get_all_favorites():
     return jsonify(favorite_list), 200
 
 
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
+# if __name__ == '__main__':
+    # app.run(port=5555, debug=True)
+
+if __name__ == "__main__":
+    app.run(port=5555, host='0.0.0.0', debug=False)
