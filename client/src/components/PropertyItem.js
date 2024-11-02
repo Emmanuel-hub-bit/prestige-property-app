@@ -17,24 +17,6 @@ const PropertyItem = ({ property }) => {
   );
 };
 
-// Inline style for property item
-// const propertyItemStyle = {
-//   border: '1px solid #ddd',
-//   padding: '15px',
-//   borderRadius: '8px',
-//   textAlign: 'left',
-//   display: 'flex', // Use flexbox for consistent layout
-//   flexDirection: 'column', // Align children vertically
-//   height: '300px', // Set a fixed height for all items
-//   justifyContent: 'space-between', // Space out children evenly
-// };
-
-// // Inline style for property image
-// const imageStyle = {
-//   width: '100%',  // Make the image responsive
-//   borderRadius: '8px', // Match the card's border radius
-//   marginBottom: '10px' // Space between image and text
-// };
 
 
 // Inline styles
