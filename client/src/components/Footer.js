@@ -28,9 +28,10 @@ const footerStyle = {
   color: '#fff',
   textAlign: 'center',
   padding: '5px 0',
-  position: 'fixed',
+  // position: 'fixed',
   bottom: 0,
   width: '100%',
+  marginTop: 'auto',
 };
 
 const textStyle = {

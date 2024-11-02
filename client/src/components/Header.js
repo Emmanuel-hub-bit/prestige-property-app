@@ -27,14 +27,6 @@ const Header = () => {
           <>
             <Link to="/properties" style={linkStyles}>Properties</Link>
             <Link to="/favorites" style={linkStyles}>Favorites</Link>
-            {/* <span style={userInfoStyles}>
-              Welcome, {user.name}!
-              <button onClick={handleLogout} style={logoutButtonStyles}>Logout</button>
-            </span> */}
-            <div style={userContainerStyles}>
-              <span style={welcomeTextStyles}>Welcome, {user.name}!</span>
-              <button onClick={handleLogout} style={logoutButtonStyles}>Logout</button>
-            </div>
           </>
         )}
 
@@ -43,17 +35,19 @@ const Header = () => {
           <Link to="/login" style={linkStyles}>Login</Link>
         )}
       </nav>
+
+      {/* User Info and Logout button aligned to the right */}
+      {user && (
+        <div style={userContainerStyles}>
+          <span style={welcomeTextStyles}>Welcome, {user.name}!</span>
+          <button onClick={handleLogout} style={logoutButtonStyles}>Logout</button>
+        </div>
+      )}
     </header>
   );
 };
 
-// Inline styles (for simplicity)
-// const headerStyles = { position: 'fixed', top: 0, width: '100%', background: '#333', padding: '10px', color: '#fff', zIndex: 10 };
-// const navStyles = { display: 'flex', alignItems: 'center', gap: '15px' };
-// const linkStyles = { color: '#fff', textDecoration: 'none' };
-// const userInfoStyles = { marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' };
-// const logoutButtonStyles = { background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '14px' };
-
+// Inline styles (adjusted for alignment)
 const headerStyles = {
   position: 'fixed',
   top: 0,
@@ -63,7 +57,8 @@ const headerStyles = {
   color: '#fff',
   zIndex: 10,
   display: 'flex',
-  justifyContent: 'space-between',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between', // Ensures space between nav and user info
   alignItems: 'center',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
 };
@@ -72,20 +67,23 @@ const navStyles = {
   display: 'flex',
   alignItems: 'center',
   gap: '20px',
-  flexWrap: 'wrap', // Allows wrapping if space is tight
+  flexWrap: 'wrap',
 };
 
 const linkStyles = {
   color: '#fff',
   textDecoration: 'none',
   fontSize: '1rem',
+  whiteSpace: 'nowrap',
 };
 
 const userContainerStyles = {
-  marginLeft: 'auto', // Pushes user info to the right
   display: 'flex',
   alignItems: 'center',
   gap: '10px',
+  whiteSpace: 'nowrap', // Prevents text wrapping
+  overflow: 'hidden', // Prevents overflow
+  textOverflow: 'ellipsis', // Adds ellipsis if text overflows
 };
 
 const welcomeTextStyles = {

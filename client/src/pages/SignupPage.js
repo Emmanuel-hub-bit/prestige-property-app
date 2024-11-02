@@ -39,8 +39,8 @@ const SignupPage = () => {
     <div style={containerStyle}>
       <h2>Sign Up</h2>
       {message && <p style={message.type === 'error' ? errorStyle : successStyle}>{message.text}</p>}
-      <form onSubmit={handleSignup}>
-        <label>
+      <form onSubmit={handleSignup} style={formStyle} >
+        <label style={labelStyle} >
           Username:
           <input
             type="text"
@@ -50,7 +50,7 @@ const SignupPage = () => {
             style={inputStyle}
           />
         </label>
-        <label>
+        <label style={labelStyle} >
           Email:
           <input
             type="email"
@@ -60,7 +60,7 @@ const SignupPage = () => {
             style={inputStyle}
           />
         </label>
-        <label>
+        <label style={labelStyle} >
           Password:
           <input
             type="password"
@@ -76,10 +76,52 @@ const SignupPage = () => {
   );
 };
 
-// Inline styles for feedback messages
-const containerStyle = { textAlign: 'center', padding: '20px' };
-const inputStyle = { margin: '10px 0', padding: '5px', width: '80%' };
-const buttonStyle = { padding: '5px 10px', background: '#333', color: '#fff', border: 'none', cursor: 'pointer' };
+// // Inline styles for feedback messages
+// const containerStyle = { textAlign: 'center', padding: '20px' };
+// const inputStyle = { margin: '10px 0', padding: '5px', width: '20%' };
+// const buttonStyle = { padding: '5px 10px', background: '#333', color: '#fff', border: 'none', cursor: 'pointer' };
+// const successStyle = { color: 'green' };
+// const errorStyle = { color: 'red' };
+
+
+// Updated styles for column layout
+const containerStyle = {
+  textAlign: 'center',
+  padding: '20px',
+};
+
+const formStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '15px', // Adds spacing between elements
+};
+
+const labelStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  width: '100%',
+  maxWidth: '300px',
+};
+
+const inputStyle = {
+  padding: '8px',
+  width: '100%',
+  boxSizing: 'border-box',
+  marginTop: '5px',
+};
+
+const buttonStyle = {
+  padding: '10px 15px',
+  background: '#333',
+  color: '#fff',
+  border: 'none',
+  cursor: 'pointer',
+  width: '100%',
+  maxWidth: '300px',
+};
+
 const successStyle = { color: 'green' };
 const errorStyle = { color: 'red' };
 
