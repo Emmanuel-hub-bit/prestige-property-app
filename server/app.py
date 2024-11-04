@@ -21,7 +21,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Configuring the application
 app = Flask(__name__)
 # CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
-CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://prestige-property-app-3.onrender.com"])
+CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://prestige-property-app-3.onrender.com", "https://prestige-property-app-2.onrender.com"])
 
 # Database configuration and initialization
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
