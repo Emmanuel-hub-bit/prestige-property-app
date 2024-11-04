@@ -48,6 +48,7 @@ def home():
 def signup():
     data = request.get_json()
     print("Received data:", data)
+
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
@@ -57,12 +58,14 @@ def signup():
     
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     new_user = User(username=username, email=email, password=hashed_password)
+    print("New user object before adding to session:", new_user)
     
-    db.session.add(new_user)
+    # db.session.add(new_user)
     # db.session.commit()
     
     # return jsonify({'message': 'Registration successful'})
     try:
+        db.session.add(new_user)
         db.session.commit()
         return jsonify({'message': 'Registration successful'}), 201
     except Exception as e:
@@ -70,10 +73,6 @@ def signup():
         print("Error occurred while saving user:", e)
         return jsonify({'message': 'Failed to register user.'}), 500
 
-from flask import jsonify, request
-from werkzeug.security import check_password_hash
-import jwt
-from datetime import datetime, timedelta
 
 @app.route('/login', methods=['POST'])
 def login():
