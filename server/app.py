@@ -20,7 +20,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Configuring the application
 app = Flask(__name__)
-# CORS(app, origins=[ "https://prestige-property-app-3.onrender.com", "https://prestige-property-app-2.onrender.com"])
 CORS(app, 
      origins=["https://prestige-property-app-3.onrender.com"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -60,13 +59,10 @@ def signup():
     new_user = User(username=username, email=email, password=hashed_password)
     print("New user object before adding to session:", new_user)
     
-    # db.session.add(new_user)
-    # db.session.commit()
-    
-    # return jsonify({'message': 'Registration successful'})
     try:
         db.session.add(new_user)
         db.session.commit()
+        print("User added to the database successfully.")
         return jsonify({'message': 'Registration successful'}), 201
     except Exception as e:
         db.session.rollback()  # Rollback in case of error
@@ -74,15 +70,41 @@ def signup():
         return jsonify({'message': 'Failed to register user.'}), 500
 
 
+# POST Users Endpoint
+@app.route('/users', methods=['POST'])
+def post_user():
+    data = request.get_json()
+    print("Received user data for posting:", data)
+
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'message': 'Email already exists.'}), 400
+
+    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+    new_user = User(username=username, email=email, password=hashed_password)
+    
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        print("User posted to the database successfully.")
+        return jsonify({'message': 'User created successfully', 'user': {'id': new_user.id, 'username': new_user.username, 'email': new_user.email}}), 201
+    except Exception as e:
+        db.session.rollback()
+        print("Error occurred while posting user:", e)
+        return jsonify({'message': 'Failed to create user.'}), 500
+
+
+# get all users route
 @app.route('/users', methods=['GET'])
 def get_all_users():
     users = User.query.all()
     users_list = [{"id": user.id, "username": user.username, "email": user.email} for user in users]
     return jsonify(users_list), 200
 
-
-
-
+# user log in route
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -91,12 +113,13 @@ def login():
     email = data.get('email')
     password = data.get('password')
     
-    try:
-        user = User.query.filter_by(email=email).first()
-    except Exception as e:
-        print("Error querying user:", e)
-        return jsonify({'message': 'Internal server error.'}), 500
+    # try:
+    #     user = User.query.filter_by(email=email).first()
+    # except Exception as e:
+    #     print("Error querying user:", e)
+    #     return jsonify({'message': 'Internal server error.'}), 500
 
+    user = User.query.filter_by(email=email).first()
     if user and check_password_hash(user.password, password):
         try:
             token = jwt.encode({
@@ -243,9 +266,6 @@ def get_all_favorites():
         })
     return jsonify(favorite_list), 200
 
-
-# if __name__ == '__main__':
-    # app.run(port=5555, debug=True)
 
 if __name__ == "__main__":
     app.run(port=5555, host='0.0.0.0', debug=False)
