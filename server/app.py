@@ -74,6 +74,15 @@ def signup():
         return jsonify({'message': 'Failed to register user.'}), 500
 
 
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    users = User.query.all()
+    users_list = [{"id": user.id, "username": user.username, "email": user.email} for user in users]
+    return jsonify(users_list), 200
+
+
+
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
