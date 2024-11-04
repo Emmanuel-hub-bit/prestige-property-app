@@ -31,9 +31,9 @@ const Header = () => {
         )}
 
         {/* Show Login link only if user is not logged in */}
-        {!user && (
+        {/* {!user && (
           <Link to="/login" style={linkStyles}>Login</Link>
-        )}
+        )} */}
       </nav>
 
       {/* User Info and Logout button aligned to the right */}
