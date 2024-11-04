@@ -59,27 +59,49 @@ def signup():
     new_user = User(username=username, email=email, password=hashed_password)
     
     db.session.add(new_user)
-    db.session.commit()
+    # db.session.commit()
     
-    return jsonify({'message': 'Registration successful'})
+    # return jsonify({'message': 'Registration successful'})
+    try:
+        db.session.commit()
+        return jsonify({'message': 'Registration successful'}), 201
+    except Exception as e:
+        db.session.rollback()  # Rollback in case of error
+        print("Error occurred while saving user:", e)
+        return jsonify({'message': 'Failed to register user.'}), 500
+
+from flask import jsonify, request
+from werkzeug.security import check_password_hash
+import jwt
+from datetime import datetime, timedelta
 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
+    print("Received login data:", data)
+
     email = data.get('email')
     password = data.get('password')
     
-    user = User.query.filter_by(email=email).first()
-    
+    try:
+        user = User.query.filter_by(email=email).first()
+    except Exception as e:
+        print("Error querying user:", e)
+        return jsonify({'message': 'Internal server error.'}), 500
+
     if user and check_password_hash(user.password, password):
-        # Using app.config['SECRET_KEY'] for JWT encoding
-        token = jwt.encode({
-            'user_id': user.id, 
-            'exp': datetime.utcnow() + timedelta(hours=1)
-        }, app.config['SECRET_KEY'], algorithm='HS256')  # Changed here
-        return jsonify({'message': 'Login successful', 'token': token}), 200
-    
+        try:
+            token = jwt.encode({
+                'user_id': user.id,
+                'exp': datetime.utcnow() + timedelta(hours=1)
+            }, app.config['SECRET_KEY'], algorithm='HS256')
+            return jsonify({'message': 'Login successful', 'token': token}), 200
+        except Exception as e:
+            print("Error generating token:", e)
+            return jsonify({'message': 'Failed to generate token.'}), 500
+
     return jsonify({'message': 'Invalid email or password.'}), 401
+
 
 
 # Helper function to decode JWT 
