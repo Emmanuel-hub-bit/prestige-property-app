@@ -23,7 +23,8 @@ app = Flask(__name__)
 CORS(app, 
      origins=["https://prestige-property-app-3.onrender.com"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-     allow_headers=["Content-Type", "Authorization"])
+     allow_headers=["Content-Type", "Authorization"]
+    )
 
 # Database configuration and initialization
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'

@@ -11,5 +11,6 @@ class Property(db.Model, SerializerMixin):
     price = db.Column(db.Float, nullable=False)
     image = db.Column(db.String(200), nullable=False)
 
-    favorites = db.relationship('Favorite', back_populates='property')
-    transactions = db.relationship('PropertyTransaction', back_populates='property')
+    # Relationships
+    favorites = db.relationship('Favorite', back_populates='property', cascade="all, delete-orphan")
+    transactions = db.relationship('PropertyTransaction', back_populates='property', cascade="all, delete-orphan")
